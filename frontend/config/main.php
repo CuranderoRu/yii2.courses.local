@@ -7,6 +7,7 @@ $params = array_merge(
 );
 
 return [
+    'language' => 'en-US',
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -40,7 +41,10 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            //'enableStrictParsing' => true, //только по правилам
             'rules' => [
+                'calendar' => 'task/index',
+                'task/<id:\d+>' => 'task/view'
             ],
         ],
         */
