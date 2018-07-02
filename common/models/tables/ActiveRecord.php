@@ -6,7 +6,7 @@
  * Time: 17:19
  */
 
-namespace frontend\models\tables;
+namespace common\models\tables;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 

@@ -8,7 +8,7 @@
                 <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
-                <p>Sergei Ogarkov</p>
+                <p><?= \Yii::$app->user->full_name ?></p>
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -31,6 +31,17 @@
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
+                    [
+                        'label' => 'Collaboration',
+                        'icon' => 'user-md',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Users', 'icon' => 'user-o', 'url' => ['/user-admin'],],
+                            ['label' => 'Teams', 'icon' => 'bicycle', 'url' => ['/team-admin'],],
+                            ['label' => 'Assignments', 'icon' => 'user-circle-o', 'url' => ['/team-assign'],],
+                        ],
+                    ],
+                    ['label' => 'Tasks', 'icon' => 'trello', 'url' => ['/task-admin']],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],

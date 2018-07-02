@@ -7,7 +7,8 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-backend',
+    'id' => 'megatracker-backend',
+    'name'=>'Megatracker admin',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],

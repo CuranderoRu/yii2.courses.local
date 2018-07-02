@@ -8,7 +8,8 @@ $params = array_merge(
 
 return [
     'language' => 'en-US',
-    'id' => 'app-frontend',
+    'id' => 'megatracker-frontend',
+    'name'=>'Megatracker',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',

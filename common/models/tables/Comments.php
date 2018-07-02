@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models\tables;
+namespace common\models\tables;
 
 
 /**

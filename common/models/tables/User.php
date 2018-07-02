@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models\tables;
+namespace common\models\tables;
 
 
 /**
@@ -16,6 +16,7 @@ namespace frontend\models\tables;
  * @property int $created_at
  * @property int $updated_at
  * @property string $locale
+ * @property string $full_name
  *
  * @property Comments[] $comments
  * @property Task[] $tasks
@@ -41,6 +42,7 @@ class User extends \yii\db\ActiveRecord
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['locale'], 'string', 'max' => 30],
+            [['full_name'], 'string', 'max' => 255],
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
@@ -63,6 +65,7 @@ class User extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'locale' => 'Locale',
+            'full_name' => 'Full name',
         ];
     }
 

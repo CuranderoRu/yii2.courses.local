@@ -9,7 +9,7 @@
 namespace frontend\models;
 
 
-use frontend\models\tables\Comments;
+use common\models\tables\Comments;
 use yii\base\Model;
 use yii\imagine\Image;
 use yii\web\UploadedFile;

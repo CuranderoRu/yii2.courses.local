@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models\tables;
+namespace common\models\tables;
 
 /**
  * This is the model class for table "task".
@@ -13,6 +13,8 @@ namespace frontend\models\tables;
  * @property int $created_at
  * @property int $updated_at
  * @property int $deadline
+ * @property int $supervisor_id
+ * @property string $completion_date
  *
  * @property User $user
  */
@@ -33,9 +35,10 @@ class Task extends ActiveRecord
     {
         return [
             [['name', 'date', 'user_id'], 'required'],
-            [['date', 'deadline'], 'safe'],
+            [['date', 'deadline', 'completion_date'], 'safe'],
             [['description'], 'string'],
             [['user_id'], 'integer'],
+            [['supervisor_id'], 'integer'],
             [['name'], 'string', 'max' => 250],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -50,9 +53,10 @@ class Task extends ActiveRecord
             'id' => 'ID',
             'name' => 'Название',
             'date' => 'Дата создания',
-            'deadline' => 'Дата исполнения',
+            'deadline' => 'Срок исполнения',
             'description' => 'Описание',
-            'user_id' => 'Пользователь',
+            'user_id' => 'Исполнитель',
+            'supervisor_id' => 'Супервайзер',
         ];
     }
 
