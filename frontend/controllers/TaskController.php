@@ -22,10 +22,24 @@ class TaskController extends Controller
 
     /**
      * Lists all Task models.
+     * @param int $id
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id = -1, $show_details = false)
     {
+        if ($id<0){
+            $description = '';
+
+        }else{
+            if (!$show_details){
+                $description = '';
+            }else{
+                $description = $this->findModel($id)->description;
+            }
+
+        }
+        $detailed = $show_details ? false : true;
+
         $userId = \Yii::$app->user->getId();
         $calendar = array_fill_keys(range(1, date("t")), []);
 
@@ -36,6 +50,8 @@ class TaskController extends Controller
 
         return $this->render('index', [
             'calendar' => $calendar,
+            'description' => $description,
+            'detailed' => $detailed,
             'table_headers' => [
                 'Date' => \Yii::t('app', 'Date'),
                 'Event' => \Yii::t('app', 'Event'),
@@ -100,7 +116,7 @@ class TaskController extends Controller
 
             Yii::$app->mailer->compose()
                 ->setTo($user->email)
-                ->setFrom([$user->email => $user->name])
+                ->setFrom([$user->email => $user->full_name])
                 ->setSubject('New task created -- ' . $event->sender->name)
                 ->setTextBody(Html::a('Task link', ['view', 'id' => $event->sender->id]))
                 ->send();
@@ -169,7 +185,7 @@ class TaskController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index', 'create', 'update', 'view'],
+                        'actions' => ['index', 'events', 'create', 'update', 'view'],
                         'allow' => true,
                         'roles' => ['createTask', 'updateTask', 'manageTasks']
                     ],

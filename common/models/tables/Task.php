@@ -14,6 +14,7 @@ namespace common\models\tables;
  * @property int $updated_at
  * @property int $deadline
  * @property int $supervisor_id
+ * @property int $project_id
  * @property string $completion_date
  *
  * @property User $user
@@ -40,6 +41,7 @@ class Task extends ActiveRecord
             [['user_id'], 'integer'],
             [['supervisor_id'], 'integer'],
             [['name'], 'string', 'max' => 250],
+            [['project_id'],  'safe'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -56,6 +58,7 @@ class Task extends ActiveRecord
             'deadline' => 'Срок исполнения',
             'description' => 'Описание',
             'user_id' => 'Исполнитель',
+            'project_id' => 'Проект',
             'supervisor_id' => 'Супервайзер',
         ];
     }
@@ -67,6 +70,12 @@ class Task extends ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
+    public function getTaskResponsibleName()
+    {
+        return User::findOne($this->user_id)->full_name;
+    }
+
 
     public static function getByDeadline($days)
     {

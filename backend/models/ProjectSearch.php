@@ -1,16 +1,16 @@
 <?php
 
-namespace common\models\tables;
+namespace backend\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\tables\Task;
+use common\models\tables\Project;
 
 /**
- * taskSearch represents the model behind the search form of `common\models\tables\Task`.
+ * ProjectSearch represents the model behind the search form of `common\models\tables\Project`.
  */
-class taskSearch extends Task
+class ProjectSearch extends Project
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class taskSearch extends Task
     public function rules()
     {
         return [
-            [['id', 'user_id', 'supervisor_id'], 'integer'],
-            [['name', 'date', 'description', 'deadline', 'created_at', 'updated_at', 'completion_date', 'project_id'], 'safe'],
+            [['id', 'responsible_id'], 'integer'],
+            [['name', 'description', 'deadline', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class taskSearch extends Task
      */
     public function search($params)
     {
-        $query = Task::find();
+        $query = Project::find();
 
         // add conditions that should always apply here
 
@@ -50,28 +50,20 @@ class taskSearch extends Task
         ]);
 
         $this->load($params);
-        if (!is_null($params['project_id'])){
-            $this->project_id = $params['project_id'];
-        }
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
-            var_dump($this->getErrors());
             return $dataProvider;
         }
 
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'date' => $this->date,
-            'user_id' => $this->user_id,
+            'responsible_id' => $this->responsible_id,
             'deadline' => $this->deadline,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'supervisor_id' => $this->supervisor_id,
-            'project_id' => $this->project_id,
-            'completion_date' => $this->completion_date,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

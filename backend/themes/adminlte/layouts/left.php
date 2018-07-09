@@ -37,8 +37,9 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Users', 'icon' => 'user-o', 'url' => ['/user-admin'],],
-                            ['label' => 'Teams', 'icon' => 'bicycle', 'url' => ['/team-admin'],],
+                            ['label' => 'Teams', 'icon' => 'user-plus', 'url' => ['/team-admin'],],
                             ['label' => 'Assignments', 'icon' => 'user-circle-o', 'url' => ['/team-assign'],],
+                            ['label' => 'Projects', 'icon' => 'bicycle', 'url' => ['/project'],],
                         ],
                     ],
                     ['label' => 'Tasks', 'icon' => 'trello', 'url' => ['/task-admin']],

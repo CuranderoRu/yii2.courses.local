@@ -1,8 +1,11 @@
 <?php
 /** @var array $tasks */
 /** @var array $table_headers */
+/** @var array $calendar */
+/** @var boolean $detailed */
 use yii\helpers\Html;
 use yii\helpers\Url;
+use \yii\widgets\Pjax;
 ?>
 
 <div class="row">
@@ -27,9 +30,14 @@ use yii\helpers\Url;
                 <?php foreach ($events as &$event): ?>
 
                     <?= Html::a($event->name,
-                        Url::to(['task/view', 'id' => $event->id])) . '<br>'
+                        Url::to(['task/view', 'id' => $event->id]))
                     ; ?>
-
+                    <? Pjax::begin(['enablePushState' => false]); ?>
+                    <? $capture = $detailed ? '(expand)' : '(collapse)'; ?>
+                    <?= Html::a($capture,['task/index', 'id' => $event->id, 'show_details' => $detailed]); ?>
+                    <br>
+                    <?= $description; ?>
+                    <? Pjax::end(); ?>
                 <?php endforeach; ?>
                 <?= '</p>'; ?>
             </td>

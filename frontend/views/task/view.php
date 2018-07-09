@@ -5,7 +5,7 @@ use yii\widgets\DetailView;
 use \yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\tables\Task */
+/* @var $model common\models\tables\Task */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
@@ -36,10 +36,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'date',
             'description:html',
-            'user_id',
-            'created_at',
+            [
+                'label' => 'Responsible',
+                'value' => $model->getTaskResponsibleName()
+            ],
+            'project_id',
+            'deadline',
+            'completion_date',
             'updated_at',
-            'deadline'
+            'created_at',
+
         ],
     ]) ?>
 

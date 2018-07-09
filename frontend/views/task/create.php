@@ -1,5 +1,5 @@
 <?php
-/** @var \frontend\models\tables\Task $model */
+/** @var \common\models\tables\Task $model */
 /** @var \yii\web\View $this */
 
 use \yii\widgets\ActiveForm;
