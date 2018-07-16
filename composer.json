@@ -25,7 +25,8 @@
         "mdmsoft/yii2-admin": "~2.0",
         "cboden/ratchet": "^0.4.1",
         "kartik-v/yii2-widget-datepicker": "@dev",
-        "kartik-v/yii2-widget-datetimepicker": "*"
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "sonko-dmitry/yii2-telegram-bot-api": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

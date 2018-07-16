@@ -15,7 +15,7 @@ use yii\helpers\Html;
 use yii\web\UploadedFile;
 
 /**
- * TaskController implements the CRUD actions for Task model.
+ * TaskController.php implements the CRUD actions for Task model.
  */
 class TaskController extends Controller
 {

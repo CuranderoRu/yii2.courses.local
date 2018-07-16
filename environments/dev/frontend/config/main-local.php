@@ -2,9 +2,18 @@
 
 $config = [
     'components' => [
+        'bot' => [
+            'class' => 'SonkoDmitry\Yii\TelegramBot\Component',
+            'apiToken' => '691945133:AAEwKUywEPyxtGeAjr2f9hCOQMtuS0OsIVQ',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '',
+        ],
+    ],
+    'modules' => [
+        'v1' => [
+            'class' => 'frontend\modules\v1\Rest',
         ],
     ],
 ];

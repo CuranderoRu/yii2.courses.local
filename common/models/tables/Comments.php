@@ -14,7 +14,7 @@ namespace common\models\tables;
  * @property int $created_at
  *
  * @property Task $task
- * @property Users $user
+ * @property User $user
  */
 class Comments extends ActiveRecord
 {
@@ -68,7 +68,7 @@ class Comments extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::class, ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     public static function getByTask($taskId)
@@ -79,6 +79,31 @@ class Comments extends ActiveRecord
                 ->all();
 
             return $val;
-        }
-
     }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'task_id',
+            'text' => 'body',
+            /*'user' => function(){
+                return $this->user;
+            },*/
+
+        ];
+    }
+
+    public function extraFields()
+    {
+        //http://yii2.courses.local/frontend/web/rests?expand=user
+        return [
+            'user',
+            'timestamp' => function(){
+                return new \DateTime();
+            }
+        ];
+    }
+
+
+}

@@ -16,6 +16,9 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'parsers' => [
+                'application/json' => \yii\web\JsonParser::class
+            ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -38,17 +41,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             //'enableStrictParsing' => true, //только по правилам
             'rules' => [
-                'calendar' => 'task/index',
-                'task/<id:\d+>' => 'task/view'
+                ['class' => \yii\rest\UrlRule::class, 'controller' => 'restcomment']
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];
