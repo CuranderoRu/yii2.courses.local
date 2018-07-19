@@ -48,10 +48,17 @@ class TaskController extends Controller
             $calendar[$date->format("j")][] = $task;
         }
 
+        $projects = Task::getAvailableProjects();
+
+        $recentTasks = Task::GetAccessedTasks();
+
         return $this->render('index', [
             'calendar' => $calendar,
             'description' => $description,
             'detailed' => $detailed,
+            'model' => new Task(),
+            'projects' => $projects,
+            'recentTasks' => $recentTasks,
             'table_headers' => [
                 'Date' => \Yii::t('app', 'Date'),
                 'Event' => \Yii::t('app', 'Event'),
@@ -95,8 +102,11 @@ class TaskController extends Controller
 
         $comments = Comments::getByTask($id);
 
+        $model = $this->findModel($id);
+        $model->StoreAccessedTask();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'comment' => $comment,
             'comments' => $comments,
         ]);

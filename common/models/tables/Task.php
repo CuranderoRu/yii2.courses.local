@@ -1,6 +1,8 @@
 <?php
 
 namespace common\models\tables;
+use yii\helpers\ArrayHelper;
+use \yii\db\Query;
 
 /**
  * This is the model class for table "task".
@@ -110,5 +112,48 @@ class Task extends ActiveRecord
             ->andWhere(['DAY(date)' => date('j', $timestamp)])
             ->all();
     }
+
+    public static function getAvailableProjects()
+    {
+
+        $subQuery = (new Query())->from('project');
+        $query = new Query();
+        $query->select(['p.id', 'p.name'])
+            ->distinct()
+            ->from(['t' => 'task'])
+            ->innerJoin(['p' => $subQuery], 'p.id = t.project_id')
+            ->where(['t.user_id' => \Yii::$app->user->id]);
+
+        return ArrayHelper::toArray($query->all());
+    }
+
+    public function StoreAccessedTask()
+    {
+        // Пробуем извлечь $data из кэша.
+        $cache = \Yii::$app->cacheTask;
+        $key = \Yii::$app->user->id;
+        $data = $cache->get($key);
+
+        if ($data === false) {
+            $data = array();
+        }
+        $data[$this->id] = $this->name;
+        if (count($data)>5){
+            array_shift($data);
+        }
+        $cache->set($key, $data);
+    }
+
+    public static function GetAccessedTasks()
+    {
+        $data = \Yii::$app->cacheTask->get(\Yii::$app->user->id);
+        if ($data === false) {
+            return [];
+        }else{
+            return $data;
+        }
+
+    }
+
 
 }

@@ -20,6 +20,9 @@ return [
                 'application/json' => \yii\web\JsonParser::class
             ]
         ],
+        'cacheTask' => [
+            'class' => 'yii\caching\FileCache'
+        ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
@@ -46,10 +49,15 @@ return [
             'showScriptName' => false,
             //'enableStrictParsing' => true, //только по правилам
             'rules' => [
-                ['class' => \yii\rest\UrlRule::class, 'controller' => 'restcomment']
+                ['class' => \yii\rest\UrlRule::class, 'controller' => 'v1/comment']
             ],
         ],
 
+    ],
+    'modules' => [
+        'v1' => [
+            'class' => 'frontend\modules\v1\Module',
+        ],
     ],
     'params' => $params,
 ];

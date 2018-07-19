@@ -12,7 +12,7 @@ use Yii;
  * @property string $description
  * @property int $deletion_mark
  *
- * @property TtTeamAssignment[] $ttTeamAssignments
+ * @property TeamAssignment[] $TeamAssignments
  */
 class Team extends \yii\db\ActiveRecord
 {
@@ -53,8 +53,15 @@ class Team extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTtTeamAssignments()
+    public function getTeamAssignments()
     {
-        return $this->hasMany(TtTeamAssignment::className(), ['team_id' => 'id']);
+        return $this->hasMany(TeamAssignment::class, ['team_id' => 'id']);
     }
+
+    public function getAvailableTeams()
+    {
+        $this->deletion_mark = false;
+        return $this->hasMany(Team::class, ['deletion_mark' => 'deletion_mark']);
+    }
+
 }

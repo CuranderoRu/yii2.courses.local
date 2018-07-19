@@ -3,14 +3,14 @@
 namespace frontend\modules\v1;
 
 /**
- * rest module definition class
+ * v1 module definition class
  */
-class Rest extends \yii\base\Module
+class Module extends \yii\base\Module
 {
     /**
      * {@inheritdoc}
      */
-    public $controllerNamespace = 'frontend\modules\rest\controllers';
+    public $controllerNamespace = 'frontend\modules\v1\controllers';
 
     /**
      * {@inheritdoc}
@@ -18,6 +18,7 @@ class Rest extends \yii\base\Module
     public function init()
     {
         parent::init();
+        \Yii::$app->user->enableSession = false;
 
         // custom initialization code goes here
     }

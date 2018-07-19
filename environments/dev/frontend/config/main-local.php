@@ -11,11 +11,6 @@ $config = [
             'cookieValidationKey' => '',
         ],
     ],
-    'modules' => [
-        'v1' => [
-            'class' => 'frontend\modules\v1\Rest',
-        ],
-    ],
 ];
 
 if (!YII_ENV_TEST) {
