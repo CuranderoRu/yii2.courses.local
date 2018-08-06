@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\tables\User;
 use Yii;
 use common\models\tables\Project;
 use backend\models\ProjectSearch;
@@ -70,8 +71,11 @@ class ProjectController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $users = User::getUsers();
+
         return $this->render('create', [
             'model' => $model,
+            'users' => $users,
         ]);
     }
 
@@ -90,8 +94,11 @@ class ProjectController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $users = User::getUsers();
+
         return $this->render('update', [
             'model' => $model,
+            'users' => $users,
         ]);
     }
 

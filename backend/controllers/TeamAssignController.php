@@ -2,6 +2,9 @@
 
 namespace backend\controllers;
 
+use common\models\tables\AuthAssignment;
+use common\models\tables\Team;
+use common\models\tables\User;
 use Yii;
 use common\models\tables\TeamAssignment;
 use common\models\TeamAssignmentSearch;
@@ -25,7 +28,7 @@ class TeamAssignController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index', 'create', 'update', 'view'],
+                        'actions' => ['index', 'create', 'update', 'delete', 'view'],
                         'allow' => true,
                         'roles' => ['admin', 'supervisor']
                     ],
@@ -63,8 +66,12 @@ class TeamAssignController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'team' => Team::findOne($model->team_id),
+            'user' => User::findOne($model->user_id),
         ]);
     }
 
@@ -78,11 +85,25 @@ class TeamAssignController extends Controller
         $model = new TeamAssignment();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $role_name = 'guest';
+            if ($model->isUser){
+                $role_name = 'user';
+            }
+            if ($model->isSupervisor){
+                $role_name = 'supervisor';
+            }
+            AuthAssignment::escalateRole($model->user_id, $role_name);
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $teams = Team::getAvailableTeams();
+        $users = User::getUsers();
+
         return $this->render('create', [
             'model' => $model,
+            'teams' => $teams,
+            'users' => $users,
         ]);
     }
 
@@ -98,11 +119,25 @@ class TeamAssignController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $role_name = 'guest';
+            if ($model->isUser){
+                $role_name = 'user';
+            }
+            if ($model->isSupervisor){
+                $role_name = 'supervisor';
+            }
+            AuthAssignment::escalateRole($model->user_id, $role_name);
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $teams = Team::getAvailableTeams();
+        $users = User::getUsers();
+
         return $this->render('update', [
             'model' => $model,
+            'teams' => $teams,
+            'users' => $users,
         ]);
     }
 

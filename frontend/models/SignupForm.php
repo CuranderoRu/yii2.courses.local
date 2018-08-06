@@ -1,6 +1,7 @@
 <?php
 namespace frontend\models;
 
+use common\models\tables\AuthAssignment;
 use yii\base\Model;
 use common\models\User;
 
@@ -52,7 +53,11 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        
-        return $user->save() ? $user : null;
+        $res = $user->save() ? $user : null;
+        if (!is_null($res)){
+            $au = new AuthAssignment();
+            $au->assignRole($user->id, 'guest');
+        }
+        return $res;
     }
 }

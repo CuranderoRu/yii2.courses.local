@@ -8,8 +8,8 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use \yii\widgets\Pjax;
 use \yii\bootstrap\ActiveForm;
+$this->registerJsFile('../js/taskmain.js',  ['position' => yii\web\View::POS_END]);
 
 ?>
 <div class="col-md-12 text-right">
@@ -30,7 +30,7 @@ use \yii\bootstrap\ActiveForm;
 $form = ActiveForm::begin([
     'id' => 'filter-selector',
     'options' => [
-        'class' => 'form-horizontal col-md-2',
+        'class' => 'form-inline col-md-12',
     ],
 ]);
 $items = [];
@@ -39,40 +39,27 @@ foreach ($projects as $key => $value) {
 }
 
 $params = [
-    'prompt' => 'Все...'
+    'prompt' => 'Все...',
+    'onChange' => 'SelectChange.call(this)'
 ];
 echo $form->field($model, 'project_id')->dropDownList($items, $params);
+echo ' ';
+echo $form->field($model, 'month')->dropDownList($months, $params);
 ActiveForm::end();
 ?>
 
-
-<table class="col-md-9 table table-bordered">
+<table class="col-md-9 table table-bordered" id="calendar_table">
     <tr>
         <td><?= $table_headers['Date']; ?></td>
         <td><?= $table_headers['Event']; ?></td>
         <td><?= $table_headers['Total']; ?></td>
     </tr>
-    <?php foreach ($calendar as $day => $events): ?>
-        <tr>
-            <td class="td-date"><span class="label label-success"><?= $day; ?></span></td>
-            <td>
-                <?= (count($events) == 0) ? '<p>-</p>' : ''; ?>
-                <?= '<p class="small">'; ?>
-                <?php foreach ($events as &$event): ?>
 
-                    <?= Html::a($event->name,
-                        Url::to(['task/view', 'id' => $event->id])); ?>
-                    <? Pjax::begin(['enablePushState' => false]); ?>
-                    <? $capture = $detailed ? '(expand)' : '(collapse)'; ?>
-                    <?= Html::a($capture, ['task/index', 'id' => $event->id, 'show_details' => $detailed]); ?>
-                    <br>
-                    <?= $description; ?>
-                    <? Pjax::end(); ?>
-                <?php endforeach; ?>
-                <?= '</p>'; ?>
-            </td>
-            <td class="td-event"><?= (count($events) > 0) ? Html::a(count($events),
-                    Url::to(['task/events', 'date' => $events[0]->date])) : '-'; ?></td>
-        </tr>
-    <?php endforeach; ?>
+    <?= $this->render('tasktable', [
+        'calendar' => $calendar,
+        'description' => $description,
+        'detailed' => $detailed,
+        'model' => $model,
+    ]) ?>
+
 </table>

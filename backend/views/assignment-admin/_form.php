@@ -4,21 +4,19 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\tables\TeamAssignment */
+/* @var $model common\models\tables\AuthAssignment */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="team-assignment-form">
+<div class="auth-assignment-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'team_id')->dropDownList($teams) ?>
+    <?= $form->field($model, 'item_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'user_id')->dropDownList($users) ?>
+    <?= $form->field($model, 'user_id')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'isSupervisor')->checkbox() ?>
-
-    <?= $form->field($model, 'isUser')->checkbox() ?>
+    <?= $form->field($model, 'created_at')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

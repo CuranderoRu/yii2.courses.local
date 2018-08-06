@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\tables\TeamAssignment */
 
-$this->title = $model->id;
+$this->title = "Team assignment " . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Team Assignments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -29,8 +29,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'team_id',
-            'user_id',
+            [
+                'attribute' => 'team',
+                'label' => 'Team',
+                'value' => $team->name,
+            ],
+
+            [
+                'attribute' => 'user',
+                'label' => 'User',
+                'value' => $user->username . ", userid - " . $user->id,
+            ],
+            'isSupervisor',
+            'isUser',
         ],
     ]) ?>
 

@@ -5,12 +5,12 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\tables\TeamAssignment;
+use common\models\tables\AuthAssignment;
 
 /**
- * TeamAssignmentSearch represents the model behind the search form of `common\models\tables\TeamAssignment`.
+ * SearchAuthAssignment represents the model behind the search form of `common\models\tables\AuthAssignment`.
  */
-class TeamAssignmentSearch extends TeamAssignment
+class SearchAuthAssignment extends AuthAssignment
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class TeamAssignmentSearch extends TeamAssignment
     public function rules()
     {
         return [
-            [['id', 'team_id', 'user_id'], 'integer'],
-            [['isSupervisor', 'isUser',], 'boolean'],
+            [['item_name', 'user_id'], 'safe'],
+            [['created_at'], 'integer'],
         ];
     }
 
@@ -41,7 +41,7 @@ class TeamAssignmentSearch extends TeamAssignment
      */
     public function search($params)
     {
-        $query = TeamAssignment::find();
+        $query = AuthAssignment::find();
 
         // add conditions that should always apply here
 
@@ -59,12 +59,11 @@ class TeamAssignmentSearch extends TeamAssignment
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'team_id' => $this->team_id,
-            'user_id' => $this->user_id,
-            'isSupervisor' => $this->isSupervisor,
-            'isUser' => $this->isUser,
+            'created_at' => $this->created_at,
         ]);
+
+        $query->andFilterWhere(['like', 'item_name', $this->item_name])
+            ->andFilterWhere(['like', 'user_id', $this->user_id]);
 
         return $dataProvider;
     }

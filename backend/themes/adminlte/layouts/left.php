@@ -38,7 +38,8 @@
                         'items' => [
                             ['label' => 'Users', 'icon' => 'user-o', 'url' => ['/user-admin'],],
                             ['label' => 'Teams', 'icon' => 'user-plus', 'url' => ['/team-admin'],],
-                            ['label' => 'Assignments', 'icon' => 'user-circle-o', 'url' => ['/team-assign'],],
+                            ['label' => 'Team members', 'icon' => 'user-circle-o', 'url' => ['/team-assign'],],
+                            ['label' => 'RBAC assignment', 'icon' => 'user-plus', 'url' => ['/assignment-admin'],],
                             ['label' => 'Projects', 'icon' => 'bicycle', 'url' => ['/project'],],
                         ],
                     ],

@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'responsible_id')->textInput() ?>
+    <?= $form->field($model, 'responsible_id')->dropDownList($users) ?>
 
     <?= $form->field($model, 'deadline')->textInput() ?>
 

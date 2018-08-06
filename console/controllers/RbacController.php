@@ -17,7 +17,7 @@ class RbacController extends Controller
     {
         $am = \Yii::$app->authManager;
 
-        $admin = $am->createRole('admin');
+        /*$admin = $am->createRole('admin');
         $supervisor = $am->createRole('supervisor');
         $user = $am->createRole('user');
 
@@ -52,6 +52,19 @@ class RbacController extends Controller
 
         $am->assign($admin, 1);
         $am->assign($supervisor, 2);
-        $am->assign($user, 3);
+        $am->assign($user, 3);*/
+
+        $admin = $am->getRole('admin');
+        $supervisor = $am->getRole('supervisor');
+        $user = $am->getRole('user');
+
+        $operationViewTeams = $am->createPermission('viewTeams');
+        $am->add($operationViewTeams);
+        $am->addChild($admin, $operationViewTeams);
+        $am->addChild($supervisor, $operationViewTeams);
+        $am->addChild($user, $operationViewTeams);
+
+
+
     }
 }

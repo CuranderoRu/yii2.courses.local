@@ -2,6 +2,8 @@
 
 namespace common\models\tables;
 
+use yii\db\Query;
+
 
 /**
  * This is the model class for table "user".
@@ -84,4 +86,19 @@ class User extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Task::class, ['user_id' => 'id']);
     }
+
+    public static function getUsers()
+    {
+        $query = new Query();
+        $rows = $query->select('id, username, full_name')->from('user')->all();
+
+
+        $arr = [];
+        foreach ($rows as $row) {
+            $arr[$row['id']] = $row['username'] . ", id - " . $row['id'];
+        }
+        return $arr;
+    }
+
+
 }

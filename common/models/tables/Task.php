@@ -23,6 +23,9 @@ use \yii\db\Query;
  */
 class Task extends ActiveRecord
 {
+
+    public $month;
+
     /**
      * {@inheritdoc}
      */
@@ -57,6 +60,7 @@ class Task extends ActiveRecord
             'id' => 'ID',
             'name' => 'Название',
             'date' => 'Дата создания',
+            'month' => 'Месяц',
             'deadline' => 'Срок исполнения',
             'description' => 'Описание',
             'user_id' => 'Исполнитель',
@@ -92,11 +96,43 @@ class Task extends ActiveRecord
             ->all();
     }
 
+    public static function getByMonth($userId, $project, $month_shift)
+    {
+
+        $subQuery = (new Query())
+            ->select('tt.user_id')
+            ->from('tt_team_assignment ttm')
+            ->innerJoin('tt_team_assignment tt', 'tt.team_id = ttm.team_id')
+            ->where('ttm.isSupervisor = true')
+            ->andWhere(['ttm.user_id'=>$userId])
+        ;
+
+        $begin = date("Y-m-01", strtotime("{$month_shift} month"));
+        $end = date("Y-m-t", strtotime("{$month_shift} month"));
+
+        $result = static::find()
+            ->where(['user_id' => $subQuery])
+            ->orWhere(['user_id' => $userId])
+            ->andWhere('date between :begin AND :end', [':begin' => $begin, ':end' => $end]);
+
+        return $result->all();
+
+    }
+
     public static function getByCurrentMonth($userId)
     {
 
+        $subQuery = (new Query())
+            ->select('tt.user_id')
+            ->from('tt_team_assignment ttm')
+            ->innerJoin('tt_team_assignment tt', 'tt.team_id = ttm.team_id')
+            ->where('ttm.isSupervisor = true')
+            ->andWhere(['ttm.user_id'=>$userId])
+        ;
+
         return static::find()
-                ->where(['user_id' => $userId])
+                ->where(['user_id' => $subQuery])
+                ->orWhere(['user_id' => $userId])
                 ->andWhere(['MONTH(date)' => date('n')])
                 ->all();
 
@@ -155,5 +191,21 @@ class Task extends ActiveRecord
 
     }
 
+    public function getRepresentation()
+    {
+        $sw = Team::getSupervisor($this->user_id);
+
+        $completion = (is_null($this->completion_date)) ? 'none' : $this->completion_date;
+
+        return $this->name .
+        ', resp.: ' .
+        User::findOne($this->user_id)->username .
+        ', start: ' .
+        $this->date . ', supervisor: ' .
+        $sw->username .
+        ', deadline: ' .
+        $this->deadline .
+        ', completion: ' . $completion;
+    }
 
 }

@@ -3,17 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\tables\User;
-use common\models\tables\usersSearch;
-use yii\filters\AccessControl;
+use common\models\tables\AuthAssignment;
+use common\models\SearchAuthAssignment;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * UserAdminController implements the CRUD actions for User model.
+ * AssignmentAdminController implements the CRUD actions for AuthAssignment model.
  */
-class UserAdminController extends Controller
+class AssignmentAdminController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -21,21 +20,6 @@ class UserAdminController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'actions' => ['index'],
-                        'allow' => true,
-                        'roles' => ['admin', 'supervisor']
-                    ],
-                    [
-                        'actions' => ['create', 'update', 'delete', 'view'],
-                        'allow' => true,
-                        'roles' => ['admin']
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -46,12 +30,12 @@ class UserAdminController extends Controller
     }
 
     /**
-     * Lists all User models.
+     * Lists all AuthAssignment models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new usersSearch();
+        $searchModel = new SearchAuthAssignment();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -61,29 +45,30 @@ class UserAdminController extends Controller
     }
 
     /**
-     * Displays a single User model.
-     * @param integer $id
+     * Displays a single AuthAssignment model.
+     * @param string $item_name
+     * @param string $user_id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($item_name, $user_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($item_name, $user_id),
         ]);
     }
 
     /**
-     * Creates a new User model.
+     * Creates a new AuthAssignment model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new User();
+        $model = new AuthAssignment();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'item_name' => $model->item_name, 'user_id' => $model->user_id]);
         }
 
         return $this->render('create', [
@@ -92,18 +77,19 @@ class UserAdminController extends Controller
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing AuthAssignment model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $item_name
+     * @param string $user_id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($item_name, $user_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($item_name, $user_id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'item_name' => $model->item_name, 'user_id' => $model->user_id]);
         }
 
         return $this->render('update', [
@@ -112,31 +98,31 @@ class UserAdminController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing AuthAssignment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $item_name
+     * @param string $user_id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($item_name, $user_id)
     {
-        $am = \Yii::$app->authManager;
-        $am->revokeAll($id);
-        $this->findModel($id)->delete();
+        $this->findModel($item_name, $user_id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the AuthAssignment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return User the loaded model
+     * @param string $item_name
+     * @param string $user_id
+     * @return AuthAssignment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($item_name, $user_id)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = AuthAssignment::findOne(['item_name' => $item_name, 'user_id' => $user_id])) !== null) {
             return $model;
         }
 

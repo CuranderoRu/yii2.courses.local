@@ -3,6 +3,7 @@
 namespace common\models\tables;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "project".
@@ -83,6 +84,24 @@ class Project extends \yii\db\ActiveRecord
         return $this->name;
     }
 
+    public static function getAvailableProjects()
+    {
+
+        $now = date('Y-m-d H:i:s');
+
+        $query = new Query();
+        $rows = $query->select('id, name')->from('project')
+            //->where(['<=', 'deadline', $now])
+            ->where('deadline>=:now', [':now' => $now])
+            ->orWhere('deadline is null')
+            ->all();
+
+        $arr = [];
+        foreach ($rows as $row) {
+            $arr[$row['id']] = $row['name'];
+        }
+        return $arr;
+    }
 
 
 }

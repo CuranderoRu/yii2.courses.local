@@ -40,8 +40,8 @@ echo $form->field($model, 'date')->widget(\kartik\date\DatePicker::class, [
     ]
 ]);
 echo $form->field($model, 'description')->textarea();
-echo $form->field($model, 'user_id')->textInput();
-echo $form->field($model, 'project_id')->textInput();
+echo $form->field($model, 'user_id')->dropDownList($users);
+echo $form->field($model, 'project_id')->dropDownList($projects);
 echo $form->field($model, 'deadline')->widget(\kartik\datetime\DateTimePicker::class, [
     'options' => ['placeholder' => 'Target date ...'],
     'pluginOptions' => [
@@ -54,5 +54,5 @@ echo Html::submitButton('Создать', ['class' => 'btn btn-success']);
 
 ActiveForm::end();
 
-echo Html::button('JS test', ['class' => 'test_btn']);
-echo Html::button('JS file test', ['class' => 'test_btn1']);
+//echo Html::button('JS test', ['class' => 'test_btn']);
+//echo Html::button('JS file test', ['class' => 'test_btn1']);

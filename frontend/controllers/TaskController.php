@@ -2,6 +2,8 @@
 
 namespace frontend\controllers;
 
+use common\models\tables\Project;
+use common\models\tables\Team;
 use frontend\models\Comment;
 use common\models\tables\Comments;
 use common\models\tables\User;
@@ -20,6 +22,25 @@ use yii\web\UploadedFile;
 class TaskController extends Controller
 {
 
+    public function actionTasktable($project, $month)
+    {
+
+        $userId = \Yii::$app->user->getId();
+        $calendar = array_fill_keys(range(1, date("t")), []);
+
+        foreach (Task::getByMonth($userId, $project, $month) as $task){
+            $date = \DateTime::createFromFormat("Y-m-d H:i:s", $task->date);
+            $calendar[$date->format("j")][] = $task;
+        }
+
+        return $this->renderPartial('tasktable', [
+            'calendar' => $calendar,
+            'description' => '',
+            'detailed' => false,
+            'model' => new Task(),
+        ]);
+    }
+
     /**
      * Lists all Task models.
      * @param int $id
@@ -27,6 +48,20 @@ class TaskController extends Controller
      */
     public function actionIndex($id = -1, $show_details = false)
     {
+
+        $projects = Task::getAvailableProjects();
+
+        $months = [];
+        $months['-3'] = date("F Y", strtotime("-3 month"));
+        $months['-2'] = date("F Y", strtotime("-2 month"));
+        $months['-1'] = date("F Y", strtotime("-1 month"));
+        $months['0'] = date("F Y");
+        for ($i = 1; $i <= 12; $i++) {
+            $months["+{$i}"] = date("F Y", strtotime("+{$i} month"));
+        };
+
+        $recentTasks = Task::GetAccessedTasks();
+
         if ($id<0){
             $description = '';
 
@@ -48,16 +83,13 @@ class TaskController extends Controller
             $calendar[$date->format("j")][] = $task;
         }
 
-        $projects = Task::getAvailableProjects();
-
-        $recentTasks = Task::GetAccessedTasks();
-
         return $this->render('index', [
             'calendar' => $calendar,
             'description' => $description,
             'detailed' => $detailed,
             'model' => new Task(),
             'projects' => $projects,
+            'months' => $months,
             'recentTasks' => $recentTasks,
             'table_headers' => [
                 'Date' => \Yii::t('app', 'Date'),
@@ -119,6 +151,7 @@ class TaskController extends Controller
      */
     public function actionCreate()
     {
+
         $model = new Task();
 
         $model->on(Task::EVENT_AFTER_INSERT, function($event){
@@ -137,9 +170,14 @@ class TaskController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+        $projects = Project::getAvailableProjects();
+        $users = Team::getAvailableTeamMembers();
 
         return $this->render('create', [
             'model' => $model,
+            'projects' => $projects,
+            'users' => $users,
+
         ]);
     }
 
@@ -160,8 +198,13 @@ class TaskController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $projects = Project::getAvailableProjects();
+        $users = Team::getAvailableTeamMembers();
+
         return $this->render('update', [
             'model' => $model,
+            'projects' => $projects,
+            'users' => $users,
         ]);
     }
 
@@ -195,7 +238,7 @@ class TaskController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index', 'events', 'create', 'update', 'view'],
+                        'actions' => ['index', 'events', 'create', 'update', 'view', 'tasktable'],
                         'allow' => true,
                         'roles' => ['createTask', 'updateTask', 'manageTasks']
                     ],

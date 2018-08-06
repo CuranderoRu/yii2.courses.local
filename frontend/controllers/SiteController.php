@@ -72,7 +72,20 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        /*if (Yii::$app->user->isGuest) {
+            return $this->render('index');
+        }else{
+            return $this->redirect(['task/index']);
+        }*/
+
+        if (Yii::$app->user->can('deleteUser')){
+
+        }else{
+            return $this->render('index');
+        }
+
+
+
     }
 
     /**

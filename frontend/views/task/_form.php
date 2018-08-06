@@ -27,9 +27,9 @@ use yii\widgets\ActiveForm;
     ]) ?>
 
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
+    <?= $form->field($model, 'user_id')->dropDownList($users) ?>
 
-    <?= $form->field($model, 'project_id')->textInput() ?>
+    <?= $form->field($model, 'project_id')->dropDownList($projects) ?>
 
     <?= $form->field($model, 'completion_date')->widget(\kartik\datetime\DateTimePicker::class, [
     'options' => ['placeholder' => 'Completion date ...'],
